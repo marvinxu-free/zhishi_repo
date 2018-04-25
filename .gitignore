@@ -29,6 +29,8 @@ dependency-reduced-pom.xml
 ######################
 *.log
 *.sqlite
+*.python-version
+
 
 # OS generated files #
 ######################

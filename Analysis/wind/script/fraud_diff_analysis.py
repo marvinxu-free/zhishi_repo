@@ -14,7 +14,7 @@ import numpy as np
 
 
 @maxent_style
-def fig_one_col(df, col, title, img_name, dpi=600, palette=None):
+def fig_one_col(df, col, title, img_name, dpi=600):
     """
     本函数用于绘制单列的分布图
     :param df:
@@ -24,13 +24,13 @@ def fig_one_col(df, col, title, img_name, dpi=600, palette=None):
     """
     fig = plt.figure(figsize=(12, 6))
     ax = fig.add_subplot(1, 1, 1)
-    sns.distplot(ax=ax, a=df[col], rug=True, hist=True, color='salmon', norm_hist=True)
-    ax.set_title(title)
+    ax=sns.distplot(ax=ax, a=df[col].values, rug=True, hist=True, color='salmon', norm_hist=True)
+    # ax.set_title(title)
     labels = [item.get_text() for item in ax.get_xticklabels()]
-    label_0_index = np.where(labels == 0 or labels == '0')
+    # label_0_index = np.where(labels == 0 or labels == '0')
     ax.set_ylabel('基金数量')
-    ax.set_xlim(df[col].min() - 0.1, df[col].max() + 0.1)
-    fig.canvas.set_window_title(title)
+    # ax.set_xlim(df[col].min() - 0.1, df[col].max() + 0.1)
+    # fig.canvas.set_window_title(title)
     fig.savefig(fname=img_name, dpi=dpi, format='png')
     plt.show(block=False)
 
