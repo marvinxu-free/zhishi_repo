@@ -1,0 +1,95 @@
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*~
+*.iml
+*.ipr
+*.iws
+dependency-reduced-pom.xml
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# scala
+######################
+.worksheet/*
+
+# py
+######################
+*.pyc
+*.pyo
+
+#eclipse
+#####################
+/target
+/demo_data/target
+/.settings
+/.classpath
+.project
+.Rproj.user
+
+#intelliJ
+#####################
+/.idea
+.idea
+/Data
+Data
+/metastore_db
+metastore_db
+
+
+#sbt
+#####################
+/project/project
+/project/target
+
+#temp data
+#####################
+/tmp*
+/*TmpData*
+
+#vim
+#####################
+*.swp
+*.swo
+Analysis/.ipynb_checkpoints/
+Analysis/Metric_Price_Suggest_Challenge/script/__pycache__/
+Analysis/cifar10/__pycache__/
+Analysis/meituan_mnist/script/__pycache__/
+Analysis/on_card/
+Analysis/sales_car/juptyer/Params/__pycache__/
+Pic/__pycache__/
+Utils/__pycache__/
+test_dir/
+test_dir1/
