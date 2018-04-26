@@ -14,7 +14,7 @@ import re
 
 
 def poisson_fit(k, lamb):
-    return (lamb ** k / factorial(k)) * np.exp(-lamb)
+    return (np.power(lamb, k) / factorial(k)) * np.exp(-lamb)
 
 
 fit_functions = [norm, t, f, foldnorm, logistic, betaprime, exponpow]
@@ -501,7 +501,7 @@ def makeEventSwitchHist(df, gcol, dpi=600, path=None, palette=None):
 
 
 @maxent_style
-def hist_with_poisson(col, df, dpi=600, poison_r=True, title=None, fname=None, palette=None):
+def hist_with_norm(col, df, steps=20, dpi=600, poison_r=True, title=None, fname=None ):
     """
     plot hist with poisson distribution fit curve
     :param col:
@@ -510,38 +510,25 @@ def hist_with_poisson(col, df, dpi=600, poison_r=True, title=None, fname=None, p
     :param poison_r:
     :param title:
     :param fname:
-    :param palette:
     :return:
     """
     fig = plt.figure(figsize=(12, 6))
     ax = fig.add_subplot(1, 2, 1)
-    maxValue = int(df[col].max())
-    minValue = int(df[col].min())
-    if maxValue > 10:
-        step = int(maxValue / 10)
-        bins = range(-step, maxValue, step)
-        bins.append(maxValue)
-    else:
-        bins = range(-1, 10, 1)
+    maxValue = df[col].max()
+    minValue = df[col].min()
+    bins = np.linspace(minValue, maxValue, steps)
     re_cols = pd.cut(df[col], bins)
     re = re_cols.value_counts(sort=False)
     re_div = re.div(re.sum())
-    br = re_div.plot.bar(ax=ax)
-    ax_log = fig.add_subplot(1, 2, 2)
-    br_log = re.plot.bar(ax=ax_log, logy=True)
+    br = re_div.plot.bar(ax=ax, color='salmon')
     x_plot = np.linspace(minValue, maxValue, 1000)
-    if poison_r:
-        bin_middles = map(lambda patch: patch._x + patch._width / 2.0, br_log.containers[0])
-        bar_heights = map(lambda x: x._height, br_log.containers[0])
-        parameters, _ = curve_fit(poisson_fit, bin_middles, bar_heights)
-        ax_log.plot(x_plot, poisson_fit(x_plot, *parameters), "r-", lw=2)
-    else:
-        bin_middles = map(lambda patch: patch._x + patch._width / 2.0, br_log.containers[0])
-        bar_heights = map(lambda x: x._height, br.containers[0])
-        parameters, _ = curve_fit(poisson_fit, bin_middles, bar_heights)
-        ax.plot(x_plot, poisson_fit(x_plot, *parameters), "r-", lw=2)
+
+    bin_middles = map(lambda patch: patch._x + patch._width / 2.0, br.containers[0])
+    bar_heights = map(lambda x: x._height, br.containers[0])
+    parameters, _ = curve_fit(poisson_fit, bin_middles, bar_heights)
+    ax.plot(x_plot, poisson_fit(x_plot, *parameters), "salmon-", lw=2)
     ax.set_title(title)
-    ax_log.set_title(title + "/log")
+
     fig.canvas.set_window_title(col)
     fig.savefig(filename=fname, dpi=dpi, format='png')
     plt.show(block=False)

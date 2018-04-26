@@ -4,35 +4,11 @@
 # Time: 2018/4/24
 # Company : Maxent
 # Email: chao.xu@maxent-inc.com
+from matplotlib import pyplot as plt
 import pandas as pd
 from Params.path_params import *
-from matplotlib import pyplot as plt
-import seaborn as sns
-from Pic.maxent_style import maxent_style
-from scipy.stats import norm
-import numpy as np
-
-
-@maxent_style
-def fig_one_col(df, col, title, img_name, dpi=600):
-    """
-    本函数用于绘制单列的分布图
-    :param df:
-    :param col:
-    :param palette:
-    :return:
-    """
-    fig = plt.figure(figsize=(12, 6))
-    ax = fig.add_subplot(1, 1, 1)
-    ax=sns.distplot(ax=ax, a=df[col].values, rug=True, hist=True, color='salmon', norm_hist=True)
-    # ax.set_title(title)
-    labels = [item.get_text() for item in ax.get_xticklabels()]
-    # label_0_index = np.where(labels == 0 or labels == '0')
-    ax.set_ylabel('基金数量')
-    # ax.set_xlim(df[col].min() - 0.1, df[col].max() + 0.1)
-    # fig.canvas.set_window_title(title)
-    fig.savefig(fname=img_name, dpi=dpi, format='png')
-    plt.show(block=False)
+# from Pic.hist import hist_with_poisson
+from Pic.pic_wind import fig_one_col
 
 
 def diff_analysis():
@@ -41,24 +17,31 @@ def diff_analysis():
     :param xls_file:
     :return:
     """
-    lof_xls_file = f'{Data_path}/wind/LOF(场内).xlsx'
-    close_xls_file = f'{Data_path}/wind/上市封闭式基金.xlsx'
+    lof_xls_file = f'{Data_path}/wind/你只是不懂LOF.xlsx'
+    # close_xls_file = f'{Data_path}/wind/上市封闭式基金.xlsx'
 
-    lof_img_name = f'{Data_path}/wind/LOF(场内)差价轴须图.png'
-    close_img_name = f'{Data_path}/wind/上市封闭式基金.png'
-    print(lof_xls_file, close_xls_file)
+    print(lof_xls_file)
 
-    df = pd.read_excel(lof_xls_file, sheet_name=2)
-    df_new = df[['差价']]
-    print(df_new.describe())
-    lof_title = '2018年4月24日LOF(场内)基金差价轴须图'
-    fig_one_col(df=df_new, col='差价', title=lof_title, img_name=lof_img_name)
+    df_lof = pd.read_excel(lof_xls_file, sheet_name=0)
+    print('LOF基金统计\n', df_lof[['贴水', '贴水率']].describe())
+    lof_img_name = f'{Data_path}/wind/LOF(场内)贴水率轴须图.png'
+    lof_title = '2018年4月24日LOF(场内)基金贴水率轴须图'
+    fig_one_col(df=df_lof, col='贴水率', title=lof_title, img_name=lof_img_name)
+    # hist_with_poisson(col='贴水率', df=df_lof, title=lof_title, fname=lof_img_name)
 
-    df = pd.read_excel(close_xls_file, sheet_name=2)
-    df_new = df[['差价']]
-    print(df_new.describe())
-    close_title = '2018年4月24日上市封闭式基金差价轴须图'
-    fig_one_col(df=df_new, col='差价', title=close_title, img_name=close_img_name)
+    lof1_title = '2018年4月24日LOF(场内)基金贴水轴须图'
+    lof1_img_name = f'{Data_path}/wind/LOF(场内)贴水轴须图.png'
+    fig_one_col(df=df_lof, col='贴水', title=lof1_title, pecent=False, img_name=lof1_img_name)
+
+    df_close = pd.read_excel(lof_xls_file, sheet_name=1)
+    print('封闭式基金统计\n', df_close[['贴水', '贴水率']].describe())
+    close_img_name = f'{Data_path}/wind/上市封闭式基金贴水率轴须图.png'
+    close_title = '2018年4月24日上市封闭式基金贴水率轴须图'
+    fig_one_col(df=df_close, col='贴水率', title=close_title, img_name=close_img_name)
+
+    close1_title = '2018年4月24日上市封闭式基金贴水轴须图'
+    close1_img_name = f'{Data_path}/wind/上市封闭式基金贴水轴须图.png'
+    fig_one_col(df=df_close, col='贴水', title=close1_title, pecent=False, img_name=close1_img_name)
 
 
 if __name__ == '__main__':
